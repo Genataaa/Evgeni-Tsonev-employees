@@ -1,0 +1,84 @@
+﻿@model ResultViewModel
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome to application</h1>
+    <p>Please upload .csv file</p>
+
+    <form asp-action="Upload" method="post" enctype="multipart/form-data">
+        Select file to upload:
+        <input name="file" type="file" accept=".csv">
+        <input type="submit" value="Upload File" name="submit">
+    </form>
+    <hr />
+    <br />
+
+    @if (TempData["WrongFileFormat"] != null)
+    {
+        <h3 class="text-danger">@TempData["WrongFileFormat"]</h3>
+    }
+
+    @if (TempData["NoFileUploaded"] != null)
+    {
+        <h3 class="text-danger">@TempData["NoFileUploaded"]</h3>
+    }
+
+    @if (Model != null)
+    {
+        <br />
+        <div style="border:2px solid black;">
+            <h3>Pair of employees who have worked together</h3>
+            <br />
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Employee ID #1</th>
+                        <th>Employee ID #2</th>
+                        <th>Project ID</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>@Model.FirstEmployeeId</td>
+                        <td>@Model.SecondEmployeeId</td>
+                        <td>@Model.ProjectId</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        @if (Model.OtherProjects.Count > 0)
+        {
+            <br />
+            <br />
+            <div style="border:2px solid black;">
+                <h3>Other projects of employees pair</h3>
+                <br />
+
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Employee ID #1</th>
+                            <th>Employee ID #2</th>
+                            <th>Project ID</th>
+                            <th>Days worked</th>
+                        </tr>
+                    </thead>
+                    @foreach (var project in Model.OtherProjects.Where(p => p.DaysWorked > 0))
+                    {
+                        <tbody>
+                            <tr>
+                                <td>@project.FirstEmployeeId</td>
+                                <td>@project.SecondEmployeeId</td>
+                                <td>@project.ProjectId</td>
+                                <td>@project.DaysWorked</td>
+                            </tr>
+                        </tbody>
+                    }
+                </table>
+            </div>
+        }
+    }
+</div>
