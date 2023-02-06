@@ -66,7 +66,7 @@
                             <th>Days worked</th>
                         </tr>
                     </thead>
-                    @foreach (var project in Model.OtherProjects.Where(p => p.DaysWorked > 0))
+                    @foreach (var project in Model.OtherProjects)
                     {
                         <tbody>
                             <tr>

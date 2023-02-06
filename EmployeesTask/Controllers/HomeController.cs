@@ -24,7 +24,7 @@
         [HttpPost]
         public async Task<IActionResult> Upload(IFormFile file)
         {
-            if (file.ContentType != "application/vnd.ms-excel" || file.ContentType != "text/csv")
+            if (file.ContentType != "application/vnd.ms-excel" && file.ContentType != "text/csv")
             {
                 TempData["WrongFileFormat"] = "Wrong File Format. Please select file with extension '.csv'!";
 
@@ -113,7 +113,7 @@
 
         private void GetAllProjectsOfEmployeesPair()
         {
-            resultViewModel.OtherProjects = projects
+            var otherProjects = projects
                 .Where(p => p.Employees
                     .Any(e => e.Id == resultViewModel.FirstEmployeeId) &&
                     p.Employees
@@ -131,6 +131,8 @@
                 })
                 .OrderByDescending(p => p.DaysWorked)
                 .ToList();
+
+            resultViewModel.OtherProjects = otherProjects.Where(p => p.DaysWorked > 0).ToList();
         }
 
         private void CheckProjectsForEmployeePairs()
